@@ -17,9 +17,9 @@ public class ErrorWrapper {
     public ErrorWrapper() {
     }
 
-    public ErrorWrapper(ErrorCode errorCode, String message, String errorDetails) {
+    public ErrorWrapper(ErrorCode errorCode, String description, String errorDetails) {
         this.errorCode = errorCode;
-        this.description = message;
+        this.description = description;
         this.errorDetails = errorDetails;
     }
 

@@ -51,25 +51,11 @@ public class ErrorResponseHandler extends HttpServlet {
         String servletName = (String) request.getAttribute(RequestDispatcher.ERROR_SERVLET_NAME);//The Servlet name of the servlet that the errored request was dispatched to
         String requestUri = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);//URI of the errored request
 
-        MyCustomException customException = (MyCustomException) throwable;
+        MyCustomException customException = (MyCustomException) throwable.getCause();
+
         //set the HTTP status code here
         //response.setStatus(customException.getHTTPStatusCode());
         ErrorResponse errorResponse = customException.createErrorResponse();
-        
-
-        String jsonErrorResponse = GeneralUtils.convertToJson(errorResponse, ErrorResponse.class);
-
-//        try {
-//            jsonErrorResponse = GeneralUtils.convertToJson(errorResponse, ErrorResponse.class);
-//
-//        } catch (MyCustomException ex) {
-//            //send a custom generic error, since we've failed to create the error
-//            errorResponse = new ErrorResponse();
-//            jsonErrorResponse = GeneralUtils.convertToJson(errorResponse, ErrorResponse.class);
-//            logger.error("Error trying to get error string to send to client");
-//        }
-
-        logger.debug("JSON error-response: " + jsonErrorResponse);
 
         //we need to cater for error scenario where we fail to cast exception or to marshal into the XML
         logger.debug("Throwable -getMessage      : " + throwable.getMessage());
@@ -78,6 +64,53 @@ public class ErrorResponseHandler extends HttpServlet {
         logger.debug("statusCode                 : " + statusCode);
         logger.debug("servletName                : " + servletName);
         logger.debug("requestURI                 : " + requestUri);
+
+        String jsonErrorResponse;
+
+        try {
+
+            jsonErrorResponse = GeneralUtils.convertToJson(errorResponse, ErrorResponse.class);
+
+        } catch (MyCustomException ex) {
+
+            jsonErrorResponse = "{\n"
+                    + "  \"success\": false,\n"
+                    + "  \"data\": {\n"
+                    + "    \"request_id\": \"\",\n"
+                    + "    \"errors\": [\n"
+                    + "      {\n"
+                    + "        \"error_code\": \"PROCESSING_ERROR\",\n"
+                    + "        \"description\": \"Error! Sorry, your request cannot be processed at the moment.\",\n"
+                    + "        \"additional_details\": \"An error occurred while trying to convert a meaningful error object to JSON.\"\n"
+                    + "      }\n"
+                    + "    ]\n"
+                    + "  }\n"
+                    + "}";
+
+            logger.error("Error! Failed to send back the error response. "
+                    + "an error occurred while trying to convert the error object to JSON: " + ex.getMessage());
+
+        } catch (Exception ex) {
+
+            jsonErrorResponse = "{\n"
+                    + "  \"success\": false,\n"
+                    + "  \"data\": {\n"
+                    + "    \"request_id\": \"\",\n"
+                    + "    \"errors\": [\n"
+                    + "      {\n"
+                    + "        \"error_code\": \"PROCESSING_ERROR\",\n"
+                    + "        \"description\": \"Error! Sorry, your request cannot be processed at the moment.\",\n"
+                    + "        \"additional_details\": \"An error occurred while trying to convert a meaningful error object to JSON.\"\n"
+                    + "      }\n"
+                    + "    ]\n"
+                    + "  }\n"
+                    + "}";
+
+            logger.error("Error! Failed to send back the error response. "
+                    + "an error occurred while trying to convert the error object to JSON: " + ex.getMessage());
+        }
+
+        logger.error("JSON error-response: " + jsonErrorResponse);
 
         response.setStatus(HttpURLConnection.HTTP_OK); //do this for some clients that cannot handle HTTP status code 500    
 

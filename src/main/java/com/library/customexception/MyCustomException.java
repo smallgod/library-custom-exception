@@ -1,6 +1,7 @@
 package com.library.customexception;
 
 import com.library.datamodel.Json.ErrorResponse;
+import com.library.utilities.LoggerUtil;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,8 +10,10 @@ import java.util.Set;
  * @author smallgod
  */
 public class MyCustomException extends Throwable {
+//public class MyCustomException extends Exception {
 
     private static final long serialVersionUID = 895611192872487357L;
+    private static final LoggerUtil logger = new LoggerUtil(MyCustomException.class);
 
     private String requestId;
     private Set<ErrorWrapper> errors;
@@ -50,8 +53,11 @@ public class MyCustomException extends Throwable {
 
             ErrorResponse.Data.Error error = data.new Error();
             error.setErrorCode(errorWrapper.getErrorCode().getValue());
-            error.setDescription(errorWrapper.getErrorDetails());
-            error.setAdditionalDetails(errorWrapper.getDescription());
+            error.setDescription(errorWrapper.getDescription());
+            error.setAdditionalDetails(errorWrapper.getErrorDetails());
+
+            logger.error("Error Code: " + errorWrapper.getErrorCode());
+            logger.error("Details:    " + errorWrapper.getErrorDetails());
 
             responseErrors.add(error);
         }
