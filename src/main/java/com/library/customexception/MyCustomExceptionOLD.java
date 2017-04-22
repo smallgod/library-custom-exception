@@ -3,8 +3,7 @@ package com.library.customexception;
 import com.library.datamodel.Constants.ErrorCategory;
 import com.library.datamodel.Constants.ErrorCode;
 import com.library.datamodel.model.v1_0.Errorresponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.library.sglogger.util.LoggerUtil;
 
 /**
  *
@@ -13,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class MyCustomExceptionOLD extends Throwable {
     
     private static final long serialVersionUID = 2127284714477086864L;
-     private static final Logger logger = LoggerFactory.getLogger(MyCustomExceptionOLD.class);
+    private static final LoggerUtil logger = new LoggerUtil(MyCustomExceptionOLD.class);
     
     private ErrorCode errorCode;
     private String errorDetails;

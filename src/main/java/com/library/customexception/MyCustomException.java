@@ -1,7 +1,7 @@
 package com.library.customexception;
 
 import com.library.datamodel.Json.ErrorResponse;
-import com.library.utilities.LoggerUtil;
+import com.library.sglogger.util.LoggerUtil;
 import java.util.HashSet;
 import java.util.Set;
 

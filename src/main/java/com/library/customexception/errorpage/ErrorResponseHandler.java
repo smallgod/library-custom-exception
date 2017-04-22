@@ -7,8 +7,8 @@ package com.library.customexception.errorpage;
 
 import com.library.customexception.MyCustomException;
 import com.library.datamodel.Json.ErrorResponse;
+import com.library.sglogger.util.LoggerUtil;
 import com.library.utilities.GeneralUtils;
-import com.library.utilities.LoggerUtil;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
