@@ -54,5 +54,6 @@ public class ErrorWrapper {
     public void setErrorCategory(ErrorCategory errorCategory) {
         this.errorCategory = errorCategory;
     }
+    
 
 }

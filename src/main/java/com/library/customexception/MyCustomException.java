@@ -10,7 +10,6 @@ import java.util.Set;
  * @author smallgod
  */
 public class MyCustomException extends Throwable {
-//public class MyCustomException extends Exception {
 
     private static final long serialVersionUID = 895611192872487357L;
     private static final LoggerUtil logger = new LoggerUtil(MyCustomException.class);
